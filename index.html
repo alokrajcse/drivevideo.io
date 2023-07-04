@@ -38,6 +38,9 @@
       if (videoId) {
         var shareableLink = "https://drive.google.com/uc?export=download&id=" + videoId;
         document.getElementById("shareableLink").value = shareableLink;
+
+        // Send the shareable link to Android WebView
+        window.AndroidWebViewInterface.playVideo(shareableLink);
       }
     }
   </script>
@@ -56,5 +59,21 @@
     <p>Shareable Link:</p>
     <input type="text" id="shareableLink" style="width: 100%;" readonly />
   </div>
+
+  <!-- Add the JavaScript interface for Android WebView -->
+  <script>
+    // Define the JavaScript interface for Android WebView
+    function AndroidWebViewInterface() {}
+
+    // Add a method to play video in Android WebView
+    AndroidWebViewInterface.playVideo = function(shareableLink) {
+      // Call the Android WebView's playVideo() method
+      // Replace 'yourWebViewId' with the actual WebView ID in your Android application
+      document.getElementById('yourWebViewId').playVideo(shareableLink);
+    }
+
+    // Register the JavaScript interface for Android WebView
+    window.AndroidWebViewInterface = AndroidWebViewInterface;
+  </script>
 </body>
 </html>
