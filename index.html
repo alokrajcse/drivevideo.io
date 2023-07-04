@@ -43,13 +43,13 @@
       }
     }
 
-    function generateWebMLink() {
+    function generateH264Link() {
       var inputLink = document.getElementById("videoLink").value;
       var videoId = getVideoId(inputLink);
       if (videoId) {
-        // Generate the WebM link (replace 'yourConversionServiceURL' with the actual conversion service URL)
-        var webmLink = "https://yourConversionServiceURL/convert?id=" + videoId + "&format=webm";
-        document.getElementById("webmLink").value = webmLink;
+        // Generate the H.264 link (replace 'yourConversionServiceURL' with the actual conversion service URL)
+        var h264Link = "https://yourConversionServiceURL/convert?id=" + videoId + "&format=h264";
+        document.getElementById("h264Link").value = h264Link;
       }
     }
   </script>
@@ -65,11 +65,11 @@
     </div>
     <p id="error" style="display: none; color: red;">Invalid video link. Please enter a valid Google Drive video link.</p>
     <button id="shareButton" onclick="generateShareableLink()" style="display: none;">Generate Shareable Link</button>
-    <button id="convertButton" onclick="generateWebMLink()" style="display: none;">Convert to WebM</button>
+    <button id="convertButton" onclick="generateH264Link()" style="display: none;">Convert to H.264</button>
     <p>Shareable Link:</p>
     <input type="text" id="shareableLink" style="width: 100%;" readonly />
-    <p>WebM Link:</p>
-    <input type="text" id="webmLink" style="width: 100%;" readonly />
+    <p>H.264 Link:</p>
+    <input type="text" id="h264Link" style="width: 100%;" readonly />
   </div>
 </body>
 </html>
