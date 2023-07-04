@@ -1,75 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Google Drive Video Player</title>
-  <style>
-    .container {
-      width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-  </style>
-  <script>
-    function playVideo() {
-      var inputLink = document.getElementById("videoLink").value;
-      var videoId = getVideoId(inputLink);
-      if (videoId) {
-        var embedLink = "https://drive.google.com/file/d/" + videoId + "/preview";
-        document.getElementById("player").setAttribute("src", embedLink);
-        document.getElementById("playerContainer").style.display = "block";
-        document.getElementById("shareButton").style.display = "block";
-        document.getElementById("convertButton").style.display = "block";
-        document.getElementById("error").style.display = "none";
-      } else {
-        document.getElementById("playerContainer").style.display = "none";
-        document.getElementById("shareButton").style.display = "none";
-        document.getElementById("convertButton").style.display = "none";
-        document.getElementById("error").style.display = "block";
-      }
-    }
-
-    function getVideoId(link) {
-      var regex = /(?:\/d\/|id=|drive\/files\/|open\?id=)([\w-]+)/;
-      var match = regex.exec(link);
-      return match ? match[1] : null;
-    }
-
-    function generateShareableLink() {
-      var inputLink = document.getElementById("videoLink").value;
-      var videoId = getVideoId(inputLink);
-      if (videoId) {
-        var shareableLink = "https://drive.google.com/uc?export=download&id=" + videoId;
-        document.getElementById("shareableLink").value = shareableLink;
-      }
-    }
-
-    function generateH264Link() {
-      var inputLink = document.getElementById("videoLink").value;
-      var videoId = getVideoId(inputLink);
-      if (videoId) {
-        // Generate the H.264 link (replace 'yourConversionServiceURL' with the actual conversion service URL)
-        var h264Link = "https://yourConversionServiceURL/convert?id=" + videoId + "&format=h264";
-        document.getElementById("h264Link").value = h264Link;
-      }
-    }
-  </script>
+    <title>Google Drive to YouTube Converter</title>
+    <style>
+        #player {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Google Drive Video Player</h2>
-    <p>Enter your Google Drive video link:</p>
-    <input type="text" id="videoLink" placeholder="Video link" style="width: 100%;" />
-    <button onclick="playVideo()">Play</button>
-    <div id="playerContainer" style="display: none;">
-      <iframe id="player" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
+    <h1>Google Drive to YouTube Converter</h1>
+    <div>
+        <input type="text" id="videoUrl" placeholder="Enter Google Drive video link">
+        <button onclick="playVideo()">Play</button>
     </div>
-    <p id="error" style="display: none; color: red;">Invalid video link. Please enter a valid Google Drive video link.</p>
-    <button id="shareButton" onclick="generateShareableLink()" style="display: none;">Generate Shareable Link</button>
-    <button id="convertButton" onclick="generateH264Link()" style="display: none;">Convert to H.264</button>
-    <p>Shareable Link:</p>
-    <input type="text" id="shareableLink" style="width: 100%;" readonly />
-    <p>H.264 Link:</p>
-    <input type="text" id="h264Link" style="width: 100%;" readonly />
-  </div>
+    <div id="player"></div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        // YouTube Player API callback
+        function onYouTubeIframeAPIReady() {
+            // Create a new YouTube player
+            player = new YT.Player('player', {
+                height: '390',
+                width: '640',
+                videoId: '',
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Player is ready
+        }
+
+        function playVideo() {
+            // Get the video URL from the input field
+            var videoUrl = document.getElementById('videoUrl').value;
+
+            // Extract the Google Drive video ID
+            var driveId = extractDriveId(videoUrl);
+
+            // Generate the YouTube embed URL
+            var youtubeUrl = `https://www.youtube.com/embed/${driveId}`;
+
+            // Load the video in the YouTube player
+            player.loadVideoById(youtubeUrl);
+        }
+
+        function extractDriveId(url) {
+            // Extract the Google Drive video ID from the URL
+            var driveId = '';
+            var regex = /(?:\/d\/|id=|open\?id=|embed\/|youtu.be\/|v\/|e\/|watch\?v=|&v=|[\?\&]v=|\/\d{0,}\/|\/embed\/|\/v\/|\/e\/|^youtu.be\/|^https:\/\/youtu.be\/)([a-zA-Z0-9_-]{11})/;
+            var match = url.match(regex);
+            if (match && match[1]) {
+                driveId = match[1];
+            }
+            return driveId;
+        }
+    </script>
 </body>
 </html>
